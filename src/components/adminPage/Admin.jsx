@@ -5,7 +5,7 @@ import PopupCreate from "./PopupCreate";
 import ListProductAdmin from "./../Child/ListProductAdmin";
 import "./../Child/css/admin.css";
 import { deleteAPI, getAPI, postAPI, putAPI } from "./../utils/api";
-import { API_PRODUCT_LOCAL } from "./../utils/const";
+import { API_CATEGORIES, API_PRODUCT_LOCAL } from "./../utils/const";
 import ProductScreen from "./../pages/ProductScreen";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -18,36 +18,46 @@ function Admin() {
   const [selectedPost, setSelectedPost] = useState(undefined);
   const [isFetchData, setIsFetchData] = useState(false);
   const [show, setShow] = useState(false);
+  const [openShowEdit, setOpenShowEdit] = useState(true);
+  const [brand, setBrand] = useState([]);
   useEffect(() => {
     console.log("UseEffect");
     fetchAPI();
+    getListBrand();
   }, [isFetchData]);
+
+
   const fetchAPI = async () => {
-    const result = await getAPI(API_PRODUCT_LOCAL);
+    const result = await axios.post(API_PRODUCT_LOCAL + '/filter', {});
     // check dữ dữ liệu trước khi lấy
     console.log(result);
     if (result) {
-      setData(result);
+      setData(result.data);
     }
   };
 
+  
   const onSubmit = async (data) => {
-    console.log(data);
-    const response = await axios.post(API_PRODUCT_LOCAL, data);
-    if (response && response.status === 200) {
-      toast.success("Thêm thành công", {autoClose: 1500});
+    if (data.name === '' || data.image === '' || data.descriptions === '' || data.price === '') {
+      toast.error("Error required field", { autoClose: 1500 });
+    } else {
+      console.log("data onsubmit", data);
+      const response = await axios.post(API_PRODUCT_LOCAL, data);
+      if (response && response.status === 200) {
+        toast.success("Thêm thành công", { autoClose: 1500 });
+      }
+      fetchAPI();
+      getListBrand();
     }
-    fetchAPI();
   };
 
   const onSubmitEdit = async (data) => {
     console.log("id", data.id);
-    const response = await putAPI(`${API_PRODUCT_LOCAL}/${data._id}`, data);
+    const response = await axios.post(API_PRODUCT_LOCAL, data);
     console.log(data.picture);
     if (response && response.status === 200) {
-      toast.success("Cập nhập thành công", {autoClose: 1500});
+      toast.success("Cập nhập thành công", { autoClose: 1500 });
       setSelectedPost(undefined);
-     
     }
     fetchAPI();
   };
@@ -55,16 +65,28 @@ function Admin() {
   const onEdit = async (post) => {
     // console.log('post', post);
     setSelectedPost(post);
+    setOpenShowEdit(true)
   };
 
   const onRemove = async (id) => {
+    console.log("id remove ", id);
     const response = await deleteAPI(`${API_PRODUCT_LOCAL}/${id}`);
     if (response && response.status === 200) {
-      toast.success("Xóa thành công", {autoClose: 1500});
+      toast.success("Xóa thành công", { autoClose: 1500 });
     }
     setIsFetchData(!isFetchData);
   };
 
+
+
+
+  const getListBrand = async () => {
+    const brands = await axios.get(API_CATEGORIES)
+    console.log('brand', brands);
+    setBrand(brands.data)
+  }
+  console.log("brannnnnnnn ", brand);
+  console.log(data);
   return (
     <React.Fragment>
       <ToastContainer
@@ -99,12 +121,18 @@ function Admin() {
                       User
                     </Link>
                   </li>
+                  <li>
+                    <Link to={'/category'}
+                    >
+                      Category
+                    </Link>
+                  </li>
                   <div
                     style={{ textAlign: "left" }}
                     id="myModalPopup"
                     class="modal fade"
                   >
-                    <PopupCreate onSubmit={onSubmit} />
+                    <PopupCreate listBrand={brand} onSubmit={onSubmit} />
                   </div>
                 </ul>
               </nav>
@@ -119,7 +147,7 @@ function Admin() {
                 className="banner-wrap"
               >
                 {selectedPost && (
-                  <FormUpdate item={selectedPost} onSubmit={onSubmitEdit} />
+                  <FormUpdate setOpenShowEdit={setOpenShowEdit} openShowEdit={openShowEdit} listBrand={brand} item={selectedPost} onSubmit={onSubmitEdit} />
                 )}
               </article>
             </div>
@@ -150,11 +178,9 @@ function Admin() {
             </div>
             <div className="col-md-6 text-md-right">
               <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
+                <img src="assets/images/misc/appstore.png" height="120" />
               </a>
-              <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
-              </a>
+
             </div>
           </div>
         </div>

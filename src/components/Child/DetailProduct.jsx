@@ -7,6 +7,7 @@ import "./css/detail.css";
 import { Button, Icon } from "semantic-ui-react";
 import { toast, ToastContainer } from "react-toastify";
 import { formatMoney } from "./Format";
+import axios from "axios";
 
 function DetailProduct({ data }) {
   const [post, setPost] = useState([]);
@@ -19,6 +20,7 @@ function DetailProduct({ data }) {
 
   const fetchAPI = async () => {
     const result = await getAPI(API_PRODUCT_DETAIL + id);
+    // const result = await axios.post(API_PRODUCT_DETAIL+'/filter',{} + id);
     if (result) {
       setPost(result);
     }
@@ -41,7 +43,7 @@ function DetailProduct({ data }) {
       ListCart = JSON.parse(ListCarTemp);
     }
     for (let i = 0; i < ListCart.length; i++) {
-      if (ListCart[i].id == post._id) {
+      if (ListCart[i].id === post.id) {
         ListCart[i].quantity = ListCart[i].quantity += count;
         localStorage.setItem("Cart", JSON.stringify(ListCart));
         check = false;
@@ -51,10 +53,11 @@ function DetailProduct({ data }) {
       let cartItem = {
         quantity: count,
         name: post.name,
-        images: post.images,
+        images: post.image,
         price: post.price,
-        id: post._id,
+        id: post.id,
         descriptions: post.descriptions,
+        
       };
       console.log(ListCart);
       ListCart.push(cartItem);
@@ -93,7 +96,7 @@ function DetailProduct({ data }) {
               <div class="preview col-md-6">
                 <div class="preview-pic tab-content">
                   <div class="tab-pane active" id="pic-1">
-                    <img style={{ height: "680px" }} src={post.images} />
+                    <img style={{ height: "680px" }} src={post.image} />
                   </div>
                 </div>
               </div>
@@ -124,6 +127,8 @@ function DetailProduct({ data }) {
                   <span> {formatMoney(Number(post.price))} $ </span>
                 </h4>
 
+                <div className="gia">Category: {post.category && post.category.name} </div>
+
                 <h5>
                   Số lượng:
                   <input
@@ -140,7 +145,7 @@ function DetailProduct({ data }) {
                     style={{
                       border: "1px solid #ddd",
                       width: "40px",
-                      height: "30px",
+                      height: "38px",
                       backgroundColor: "white",
                     }}
                   >

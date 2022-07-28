@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { Form, Input, TextArea, Button } from "semantic-ui-react";
+import { Form, Input, TextArea, Button, Select } from "semantic-ui-react";
 
-function PopupCreate({ item, onSubmit }) {
+function PopupCreate({ item, onSubmit, listBrand }) {
+
+  const [valueState, setValueState] = useState("")
+
   const [data, setData] = useState(
     item || {
-      images: "",
-      name: "",
-      price: "",
-      __v: "",
+      image: '',
+      name: '',
+      price: '',
+      descriptions: '',
+      categoryId: ''
     }
   );
 
-  const [show, setshow] = useState(true);
+  const [show, setShow] = useState(true);
 
   const showPopup = () => {
-    setshow(true);
+    setShow(true);
   };
 
   const onChangeText = (event) => {
@@ -24,8 +28,24 @@ function PopupCreate({ item, onSubmit }) {
 
   const onClickButton = (event) => {
     onSubmit(data);
-    setshow(false);
+    setShow(false);
+
   };
+
+  //
+
+  const handler = (event) => {
+    const value = event.target.value
+    console.log(value);
+    setData({ ...data, categoryId: (value) })
+    setValueState(value)
+    console.log("valueeeeeeeeeeeeeeeeee", value);
+  }
+
+  if(data.categoryId === ''){
+    console.log("Null id ");
+    setData({ ...data, categoryId: 9 })
+  }
 
   return (
     <React.Fragment>
@@ -67,7 +87,8 @@ function PopupCreate({ item, onSubmit }) {
                   control={Input}
                   label="Images"
                   placeholder="Images"
-                  name="images"
+                  name="image"
+                  defaultValue={""}
                   onChange={onChangeText}
                 />
               </Form.Group>
@@ -77,17 +98,31 @@ function PopupCreate({ item, onSubmit }) {
                 label="Price"
                 placeholder="Price $"
                 name="price"
+                defaultValue={""}
                 onChange={onChangeText}
               />
 
               {/* <Form.Field
                 id="form-textarea-control-opinion"
-                control={TextArea}
+                control={<Select placeholder='Select your country'  />}
                 label="Category"
                 placeholder="Category"
                 name="__v"
                 onChange={onChangeText}
               /> */}
+
+
+              <select onChange={handler} name={valueState}>
+                {
+                  listBrand.map((item, index) => (
+                    <option key={index} value={item.id}  >
+                      {item.name}
+                    </option>
+                  ))
+                }
+              </select>
+
+
 
               <Form.Field
                 id="form-textarea-control-opinion"

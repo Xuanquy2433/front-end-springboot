@@ -7,7 +7,7 @@ import { formatMoney } from "./Format";
 
 function ProductAdmin(props) {
   const [open, setOpen] = React.useState(false);
-  const { images, price, name, __v, _id, descriptions, onEdit, onRemove } =
+  const { image, price, name, category, id, descriptions, onEdit, onRemove } =
     props;
   const css = {
     backgroundColor: "#51a700",
@@ -23,16 +23,16 @@ function ProductAdmin(props) {
     onEdit(item);
   };
 
-  const remove = (_id) => {
-    onRemove(_id);
+  const remove = (id) => {
+    onRemove(id);
     setOpen(false);
   };
 
   return (
     <div href="#" className="card card-product-grid">
-      <Link style={{ height: "300px" }} to={`/detail/${_id}`} class="img-wrap">
+      <Link style={{ height: "300px" }} to={`/detail/${id}`} class="img-wrap">
         {" "}
-        <img style={{ width: "100%" }} src={images} />{" "}
+        <img style={{ width: "100%" }} src={image} />{" "}
       </Link>
       <figcaption className="info-wrap">
         <a
@@ -56,6 +56,9 @@ function ProductAdmin(props) {
           <span style={css} className="dot--stocking"></span>{" "}
           {formatMoney(Number(price))} ₫
         </div>
+
+        <div className="gia">Category: {category && category.name} </div>
+
         <p
           style={{
             width: "100%",
@@ -110,22 +113,23 @@ function ProductAdmin(props) {
               <Button basic color="red" inverted onClick={() => setOpen(false)}>
                 <Icon name="remove" /> No
               </Button>
-              <Button color="green" inverted onClick={() => remove(_id)}>
+              <Button color="green" inverted onClick={() => remove(id)}>
                 <Icon name="checkmark" /> Yes
               </Button>
             </Modal.Actions>
           </Modal>
 
           <Button.Or />
+          
           <Button
             positive
             onClick={() => {
               onHandleEdit({
                 name,
                 price,
-                images,
-                __v,
-                _id,
+                image,
+                category,
+                id,
                 descriptions,
               });
             }}

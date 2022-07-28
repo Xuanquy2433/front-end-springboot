@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import data from "./Data";
 import "./css/cart.css";
 import { formatMoney } from "./Format";
+import { toast } from "react-toastify";
 import { Link } from 'react-router-dom';
 
 function Cart() {
@@ -49,6 +50,21 @@ function Cart() {
     localStorage.setItem("Cart", JSON.stringify(arr));
     setTemp(temp + 1);
     console.log(arr);
+  };
+
+
+  const like = (e) => {
+    // e.preventDefault
+    console.log("like");
+    toast('🦄 Wow so easy!', {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   first.map((item, index) => {
@@ -110,17 +126,18 @@ function Cart() {
                               </div>
                               <figcaption class="info">
                                 <a href="#" class="title text-dark">
-                                  {}
+                                  { }
                                 </a>
                                 <p class="text-muted small">
                                   Size: XL, Color: blue, <br /> Name:{" "}
                                   {item.name}
                                 </p>
+
                               </figcaption>
                             </figure>
                           </td>
                           <td>
-                           <h6 style={{fontSize: '10px'}} > {item.descriptions && item.descriptions.substring(0,40)}...</h6>
+                            <h6 style={{ fontSize: '10px' }} > {item.descriptions && item.descriptions.substring(0, 40)}...</h6>
                           </td>
                           <td>
                             <input
@@ -150,9 +167,10 @@ function Cart() {
                             <a
                               data-original-title="Save to Wishlist"
                               title=""
-                              href=""
+                              style={{ cursor: "pointer" }}
                               class="btn btn-light mr-2"
                               data-toggle="tooltip"
+                              onClick={() => like()}
                             >
                               {" "}
                               <i class="fa fa-heart"></i>
@@ -297,7 +315,7 @@ function Cart() {
                 <button
                   type="submit"
                   className="btn btnPrimary"
-                  // onclick="clickMuaHang()"
+                // onclick="clickMuaHang()"
                 >
                   Mua hàng
                 </button>

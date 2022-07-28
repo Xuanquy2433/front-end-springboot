@@ -1,14 +1,27 @@
-export const API = "http://localhost:4001";
+export const API = "http://localhost:8088";
 
-export const API_PRODUCT_LOCAL = ` ${API}/api/products`;
+export const API_PRODUCT_LOCAL = ` ${API}/api/product`;
 
-export const API_PRODUCT_DETAIL = `${API}/api/products/`;
+export const API_PRODUCT_DETAIL = `${API}/api/product/`;
 
-export const API_USER_LOGIN = `${API}/api/users/login`;
-
-export const API_USER_REGISTER = `${API}/api/users/register`;
+export const API_PRODUCT_SEARCH = `${API}/api/product/search`;
 
 
-export const API_USER_USERS = `${API}/api/users`;
+
+export const API_USER_LOGIN = `${API}/api/account/login`;
+
+export const API_USER_FORGOT = `${API}/api/account/login/forgot-password`;
+
+
+export const API_USER_REGISTER = `${API}/api/account`;
+
+export const API_USER_USERS = `${API}/api/account`;
+
+export const API_USER_ADMIN = `${API}/api/account/admin`;
+
+export const API_USER_USERS_DELETE = `${API}/api/account`;
+
+
+export const API_CATEGORIES = `${API}/api/category`
 
 

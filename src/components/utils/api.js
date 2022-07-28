@@ -18,6 +18,11 @@ export const postAPI = async (url, payload) => {
   return response
 }
 
+export const postAPI2 = async (url ) => {
+  const response = await axios.post(url,{} ).catch((err) => console.error(err))
+  return response
+}
+
 export const putAPI = async (url, payload) => {
   const response = await axios.put(url, payload).catch((err) => console.error(err))
   return response

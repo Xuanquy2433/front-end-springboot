@@ -5,7 +5,7 @@ import { formatMoney } from "./Format";
 import { toast } from "react-toastify";
 
 function Product(props) {
-  const { images, price, name, __v, descriptions, _id } = props;
+  const { image, price, name, category, descriptions, id } = props;
   const addCart = (item) => {
     console.log("item", name);
     // let data = [
@@ -29,7 +29,7 @@ function Product(props) {
       ListCart = JSON.parse(ListCarTemp);
     }
     for (let i = 0; i < ListCart.length; i++) {
-      if (ListCart[i].id == _id) {
+      if (ListCart[i].id == id) {
         ListCart[i].quantity = ListCart[i].quantity + 1;
         localStorage.setItem("Cart", JSON.stringify(ListCart));
         check = false;
@@ -39,9 +39,9 @@ function Product(props) {
       let cartItem = {
         quantity: 1,
         name: name,
-        images: images,
+        images: image,
         price: price,
-        id: _id,
+        id: id,
         descriptions: descriptions,
       };
       console.log(ListCart);
@@ -66,9 +66,9 @@ function Product(props) {
   return (
     
     <div href="#" className="card card-product-grid">
-      <Link style={{ height: "300px" }} to={`/detail/${_id}`} class="img-wrap">
+      <Link style={{ height: "300px" }} to={`/detail/${id}`} class="img-wrap">
         {" "}
-        <img style={{ width: "100%" }} src={images} />{" "}
+        <img style={{ width: "100%" }} src={image} />{" "}
       </Link>
       <figcaption className="info-wrap">
         <a
@@ -96,12 +96,17 @@ function Product(props) {
           <span style={css} className="dot--stocking"></span>{" "}
           {formatMoney(Number(price))} ₫
         </div>
+
+<p>
+<div className="gia">Category: {category && category.name} </div>
+</p>
+
       </figcaption>
 
       <Button
-        onClick={() => addCart(price, name, images, __v)}
-        inverted
-        color="blue"
+        // onClick={() => addCart(price, name, images, __v)}
+        // inverted
+        // color="blue"
         inverted
         color="violet"
         onClick={() => onHandleAddCart()}

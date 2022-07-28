@@ -3,21 +3,30 @@ import Product from "./Product";
 import Sliderr from "./Sliderr";
 
 
-function ListProduct({ data }) {
+function ListProduct({ data, listCategories }) {
   console.log("listproduct,", data);
 
   return (
     <React.Fragment>
-      <section style={{position: 'relative',zIndex: -1}} className="section-main bg padding-y">
+      <section style={{ position: 'relative', zIndex: -1 }} className="section-main bg padding-y">
         <div className="container">
           <div className="row">
             <aside className="col-md-3">
               <nav className="card">
                 <ul className="menu-category">
-                  <li>
+                  {/* <li>
                     <a href="#">Best clothes</a>
-                  </li>
-                  <li>
+                  </li> */}
+
+                  {listCategories &&
+                    listCategories.map((item, index) => (
+                      <li  key={index}>
+                        <a style={{cursor: "pointer"}}  href=""> {item.name} </a>
+                      </li>
+                    ))
+                  }
+
+                  {/* <li>
                     <a href="#">Automobiles</a>
                   </li>
                   <li>
@@ -34,13 +43,13 @@ function ListProduct({ data }) {
                   </li>
                   <li>
                     <a href="#">Online goods</a>
-                  </li>
+                  </li> */}
                 </ul>
               </nav>
             </aside>
             <div className="col-md-9">
               <article className="banner-wrap">
-               <Sliderr/>
+                <Sliderr />
                 {/* <img style={{height: "380px"}} src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/online-fashion-sale-banner-template-design-cc34c2027d0bb5ccc2ff90231abaa242_screen.jpg?ts=1613395464" className="w-100 rounded" /> */}
               </article>
             </div>
@@ -78,16 +87,14 @@ function ListProduct({ data }) {
             </div>
             <div className="col-md-6 text-md-right">
               <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
+                <img src="assets/images/misc/appstore.png" height="120" />
               </a>
-              <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
-              </a>
+
             </div>
           </div>
         </div>
       </section>
-     
+
     </React.Fragment>
   );
 }

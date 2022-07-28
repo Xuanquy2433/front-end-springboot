@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./css/login.css";
 import axios from "axios";
-import { API_USER_LOGIN } from "../utils/const";
+import { API_USER_FORGOT, API_USER_LOGIN } from "../utils/const";
 import "react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,23 @@ function Login() {
 
   const onLogin = async (e) => {
     const reponse = await axios.post(API_USER_LOGIN, data);
+    console.log("respon", reponse);
+    if (reponse && reponse.status === 200) {
+      console.log("Login sucsess");
+      alert("dang nhap thanh cong");
+      // toast.success("Login sucsess");
+      localStorage.setItem("token", reponse?.data.token);
+      localStorage.setItem("user", JSON.stringify(reponse.data));
+      navigate('/')
+
+    } else if (reponse && reponse.status === 403) {
+      alert("dang nhap that bai");
+    }
+  };
+
+
+  const onForget = async (e) => {
+    const reponse = await axios.post(API_USER_FORGOT, data);
     console.log("respon", reponse);
     if (reponse && reponse.status === 200) {
       console.log("Login sucsess");

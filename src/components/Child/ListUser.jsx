@@ -2,21 +2,26 @@ import React, { useEffect, useState } from "react";
 import User from "./User";
 import PopupCreateUser from "./PopupCreateUser";
 import { toast } from "react-toastify";
-import { API_USER_REGISTER, API_USER_USERS } from "./../utils/const";
+import { API_USER_ADMIN, API_USER_REGISTER, API_USER_USERS, API_USER_USERS_DELETE } from "./../utils/const";
 import { deleteAPI, getAPI, postAPI, putAPI } from "./../utils/api";
 import axios from "axios";
 import PopupUpdateUser from "./PopupUpdateUser";
+import { Link } from "react-router-dom";
 
 function ListUser({ data }) {
   const [user, setUser] = useState([]);
   const [selectedPost, setSelectedPost] = useState(undefined);
+  const [openShowEdit, setOpenShowEdit] = useState(true);
+
   const [isFetchData, setIsFetchData] = useState(false);
   const [show, setShow] = useState(1);
+
+
 
   useEffect(() => {
     fetchAPI();
   }, [isFetchData]);
-  
+
   const fetchAPI = async () => {
     const result = await getAPI(API_USER_USERS);
     console.log("UseEffecttttttttttttttttt");
@@ -29,17 +34,22 @@ function ListUser({ data }) {
 
   const onSubmit = async (user) => {
     console.log(user);
-    const response = await axios.post(API_USER_REGISTER, user);
-    if (response && response.status === 200) {
-      toast.success("Thêm thành công", { autoClose: 1500 });
+
+    if (user.username === '' || user.password === '' || user.email === '' || user.name === '') {
+      toast.error("Error required field", { autoClose: 1500 });
+    } else {
+      const response = await axios.post(API_USER_ADMIN, user);
+      if (response && response.status === 200) {
+        toast.success("Thêm thành công", { autoClose: 1500 });
+        fetchAPI();
+      }
       fetchAPI();
     }
-    fetchAPI();
   };
 
   const onSubmitEdit = async (user) => {
     console.log("id", user);
-    const response = await putAPI(`${API_USER_USERS}/${user._id}`, user);
+    const response = await postAPI(API_USER_ADMIN, user);
 
     if (response && response.status === 200) {
       toast.success("Cập nhập thành công", { autoClose: 1500 });
@@ -50,41 +60,85 @@ function ListUser({ data }) {
 
   const onEdit = async (user) => {
     setSelectedPost(user);
+    setOpenShowEdit(true)
   };
 
   const onRemove = async (id) => {
-    const response = await deleteAPI(`${API_USER_USERS}/${id}`);
+    const response = await deleteAPI(`${API_USER_USERS_DELETE}/${id}`);
     if (response && response.status === 200) {
       toast.success("Xóa thành công", { autoClose: 1500 });
       fetchAPI()
     }
     // setIsFetchData(!isFetchData);
-   fetchAPI()
+    fetchAPI()
   };
 
   return (
     <>
-      <button
-        style={{ width: "120px", height: "30px", margin: "20px 0px 20px 0px" }}
-        class="trigger-btnn"
+
+      <section className="section-main bg padding-y">
+        <div className="container">
+          <div className="row">
+            <aside className="col-md-3">
+              <nav className="card">
+                <ul className="menu-category">
+
+                  <li>
+                    <Link to={'/user'}
+                    >
+                      User
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={'/category'}
+                    >
+                      Category
+                    </Link>
+                  </li>
+
+                </ul>
+              </nav>
+            </aside>
+            <article>
+
+              <div style={{ display: "flex", justifyContent: "right" }}>
+                <h1 style={{ marginLeft: "270px", marginTop: "20px" }}>User</h1>
+                <button
+                  style={{ width: "150px", height: "6vh", margin: "20px 0px 20px 380px" }}
+                  class="btn btn-outline-success"
+                  data-toggle="modal"
+                  href="#myModalPopup"
+                >
+                  Create
+                </button>
+
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* <button
+        style={{ width: "120px", height: "39px", margin: "20px 0px 20px 0px" }}
+        class="btn btn-outline-success"
         data-toggle="modal"
         href="#myModalPopup"
       >
         Create
-      </button>
+      </button> */}
 
       {selectedPost && (
-        <PopupUpdateUser item={selectedPost} onSubmit={onSubmitEdit} />
+        <PopupUpdateUser setOpenShowEdit={setOpenShowEdit} openShowEdit={openShowEdit} item={selectedPost} onSubmit={onSubmitEdit} />
       )}
 
       <div style={{ textAlign: "left" }} id="myModalPopup" class="modal fade">
         <PopupCreateUser onSubmit={onSubmit} />
       </div>
-      <table
-        style={{ width: "90%", margin: "auto" }}
-        class="table table-borderless table-shopping-cart"
+      <table class="table"
+      // style={{ width: "90%", margin: "auto" }}
+      // class="table table-borderless table-shopping-cart"
       >
-        <thead class="text-muted">
+        <thead class="thead-dark">
           <tr class="small text-uppercase">
             <th scope="col" width="120">
               Username

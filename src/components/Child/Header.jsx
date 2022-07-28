@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import Login from "./Login";
 import "./css/header.css";
 import Register from "./Register";
+import LoginNew from "./LoginNew";
+import RegisterNew from "./RegisterNew";
+import { toast } from "react-toastify";
 
 function Header({ onSearch }) {
   const [state, setState] = useState("");
@@ -12,6 +15,33 @@ function Header({ onSearch }) {
     event.preventDefault();
     onSearch(state);
   };
+
+  const logout = () => {
+    // alert("ok")
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    toast.success("Logout success");
+    setTimeout(() => window.location.reload(false)
+      , 2000)
+
+  }
+
+  // let name = localStorage.getItem("user");
+  // console.log(name);
+  // console.log(JSON.parse(name).name);
+
+  let showName = ""
+
+  if (localStorage.getItem("user")) {
+    let name = localStorage.getItem("user");
+    showName = JSON.parse(name).name;
+  }
+
+
+
+  let test = "!"
+
+
 
   const fetchAPI = async () => {
     window.location.reload();
@@ -40,7 +70,7 @@ function Header({ onSearch }) {
               >
                 <Link onClick={click} className="bt" to="/">
                   {" "}
-                  Dawn Shop{" "}
+                  Dawn {" "}
                 </Link>
               </div>
               <div className="col-lg-6 col-sm-12">
@@ -50,6 +80,7 @@ function Header({ onSearch }) {
                       type="text"
                       class="form-control"
                       placeholder="Search"
+                      name="id"
                       onChange={(e) => setState(e.target.value)}
                     />
                     <div className="input-group-append">
@@ -87,29 +118,33 @@ function Header({ onSearch }) {
                       <i className="fa fa-user"></i>
                     </Link>
                     <div className="text">
-                      <span className="text-muted">Welcome! </span>
+                      <span className="text-muted">Welcome, <span style={{ color: "black", fontWeight: "bold", fontSize: "15px" }}  >{showName}</span> </span>
+
                       <div>
                         <a
                           className="trigger-btnn"
                           data-toggle="modal"
                           href="#myModal"
                         >
-                          Sign in
+                          {showName ? <span></span> : <span>Sign In</span>}
                         </a>{" "}
-                        |
+                        {showName ? <span></span> : <span>| </span>}
+
+                        {showName ? <button className="active"  style={{border: "0px solid",backgroundColor: "white"}} onClick={() => logout()} >Logout</button> : <span></span>}
+
                         <a
                           className="trigger-btnn"
                           data-toggle="modal"
                           href="#myModalRegister"
                         >
-                          Register
+                          {showName ? <span></span> : <span>Sign Up</span>}
                         </a>
                       </div>
                       <div id="myModal" className="modal fade">
-                        <Login />
+                        <LoginNew />
                       </div>
                       <div id="myModalRegister" className="modal fade">
-                        <Register />
+                        <RegisterNew />
                       </div>
                     </div>
                   </div>

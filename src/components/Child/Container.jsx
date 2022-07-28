@@ -65,11 +65,9 @@ function Container({ data }) {
             </div>
             <div className="col-md-6 text-md-right">
               <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
+                <img src="assets/images/misc/appstore.png" height="120" />
               </a>
-              <a href="#">
-                <img src="assets/images/misc/appstore.png" height="40" />
-              </a>
+              
             </div>
           </div>
         </div>

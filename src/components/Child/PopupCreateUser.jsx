@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, TextArea, Button } from "semantic-ui-react";
+import { Form, Input, TextArea, Button, Select } from "semantic-ui-react";
 
 function PopupCreateUser({ item, onSubmit }) {
   const [data, setData] = useState(
@@ -8,9 +8,11 @@ function PopupCreateUser({ item, onSubmit }) {
       password: "",
       role: "",
       email: "",
-      name:""
+      name: ""
     }
   );
+
+  const [valueState, setValueState] = useState("")
 
   const [show, setshow] = useState(true);
 
@@ -28,6 +30,18 @@ function PopupCreateUser({ item, onSubmit }) {
     setshow(false);
   };
 
+
+
+  const handler = (event) => {
+    const value = event.target.value
+    console.log(value);
+    setData({ ...data, role: (value) })
+    setValueState(value)
+    console.log("valueeeeeeeeeeeeeeeeee", value);
+  }
+  if (data.role === '') {
+    setData({ ...data, role: "user" })
+  }
   return (
     <React.Fragment>
       <div class="modal-dialog modal-login">
@@ -81,14 +95,21 @@ function PopupCreateUser({ item, onSubmit }) {
                 onChange={onChangeText}
               />
 
-              <Form.Field
+              {/* <Form.Field
                 id="form-input-control-last-name"
                 control={Input}
                 label="Role"
-                placeholder="Role "
+                placeholder="Role"
                 name="role"
                 onChange={onChangeText}
-              />
+              /> */}
+
+              <select class="form-select" onChange={handler} name="role" aria-label="Default select example">
+
+                <option selected value="user">user</option>
+                <option value="admin">admin</option>
+              </select>
+
 
               {/* <Form.Field
                 id="form-textarea-control-opinion"
@@ -107,6 +128,7 @@ function PopupCreateUser({ item, onSubmit }) {
                 name="name"
                 onChange={onChangeText}
               />
+
 
               <div style={{ textAlign: "right" }}>
                 <Form.Field

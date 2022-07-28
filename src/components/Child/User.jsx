@@ -4,15 +4,17 @@ import { Button, Header, Icon, Modal } from "semantic-ui-react";
 
 function User(props) {
 
-  const { username, password, role, name, email, _id, onEdit, onRemove } =
+  const { username, password, role, name, email, id, onEdit, onRemove } =
     props;
+
+    
   const onHandleEdit = (item) => {
     console.log("handleEdit", item);
     onEdit(item);
   };
   
-  const remove = (_id) => {
-    onRemove(_id);
+  const remove = (id) => {
+    onRemove(id);
   };
   const [open, setOpen] = React.useState(false);
 
@@ -35,16 +37,17 @@ function User(props) {
           <div class="price-wrap">{name}</div>
         </td>
         <td class="text-right">
-          <a
+          <button
+          style={{marginRight: "15px",cursor: "pointer"}}
             data-original-title="Save to Wishlist"
             title=""
-            class="btn btn-light mr-2"
+            class="btn btn-outline-success"
             data-toggle="tooltip"
             onClick={() => {
               onHandleEdit({
                 username,
                 password,
-                _id,
+                id,
                 role,
                 email,
                 name,
@@ -53,7 +56,7 @@ function User(props) {
           >
             {" "}
             Update
-          </a>
+          </button>
           {/* <a onClick={() => remove(_id)} class="btn btn-light">
             {" "}
             Remove
@@ -66,7 +69,7 @@ function User(props) {
             open={open}
             size="small"
             trigger={
-              <Button>
+              <Button  class="btn btn-outline-danger">
                 <i className="fa-solid fa-xmark"></i>
               </Button>
             }
@@ -85,7 +88,7 @@ function User(props) {
               <Button basic color="red" inverted onClick={() => setOpen(false)}>
                 <Icon name="remove" /> No
               </Button>
-              <Button color="green" inverted onClick={() => remove(_id)}>
+              <Button color="green" inverted onClick={() => remove(id)}>
                 <Icon name="checkmark" /> Yes
               </Button>
             </Modal.Actions>
