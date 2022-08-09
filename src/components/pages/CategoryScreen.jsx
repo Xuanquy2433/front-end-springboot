@@ -31,9 +31,8 @@ function CategoryScreen() {
     const onSubmit = async (data) => {
 
         if (data.name === '') {
-            toast.error("Error required field", { autoClose: 1500 });
+            toast.error("Name required field", { autoClose: 1500 });
         } else {
-
             const response = await axios.post(API_CATEGORIES, data)
             if (response && response.status === 200) {
                 toast.success("Thêm thành công", { autoClose: 1500 });
@@ -52,10 +51,14 @@ function CategoryScreen() {
 
     const onSubmitEdit = async (data) => {
         console.log("data id ", data);
-        const response = await axios.post(API_CATEGORIES, data)
-        if (response && response.status === 200) {
-            toast.success("Sửa thành công", { autoClose: 1500 });
-            fetchAPI();
+        if (data.name === '') {
+            toast.error("Name required field", { autoClose: 1500 });
+        } else {
+            const response = await axios.post(API_CATEGORIES, data)
+            if (response && response.status === 200) {
+                toast.success("Sửa thành công", { autoClose: 1500 });
+                fetchAPI();
+            }
         }
     }
 

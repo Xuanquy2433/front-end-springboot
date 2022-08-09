@@ -109,9 +109,9 @@ function Footer() {
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a target="_blank" rel="noopener noreferrer" href="https://dawn-xuan-quy.netlify.app">
                       {" "}
-                      <i className="fab fa-twitter"></i> Twitter{" "}
+                      <i className="fab fa-github"></i> Git{" "}
                     </a>
                   </li>
                   <li>

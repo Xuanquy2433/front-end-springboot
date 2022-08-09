@@ -23,6 +23,9 @@ import Dashboard from "./components/adminPage/Dashboard";
 import LoginNew from "./components/Child/LoginNew";
 import CategoryScreen from "./components/pages/CategoryScreen";
 import PostScreen from "./components/pages/ProductScreen";
+import Coupon from "./components/Coupon";
+import Forgot from "./components/Child/Forgot";
+import ListSearchProductCategory from "./components/Child/ListSearchProductCategory";
 
 function App() {
   const [data, setData] = useState([]);
@@ -31,17 +34,17 @@ function App() {
 
   const [selectedPost, setSelectedPost] = useState(undefined);
   const [isFetchData, setIsFetchData] = useState(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(0);
 
   useEffect(() => {
     console.log("UseEffect");
     fetchAPI();
     fetchAPIUser();
     list();
-  }, [isFetchData]);
+  }, [isFetchData, show]);
 
   const fetchAPI = async () => {
-    const result = await axios.post(API_PRODUCT_LOCAL+'/filter',{});
+    const result = await axios.post(API_PRODUCT_LOCAL + '/list', {});
     //kiem tra du lieu truoc khi lay
     if (result) {
       setData(result.data);
@@ -52,10 +55,10 @@ function App() {
   const list = async () => {
     const result = await getAPI(API_CATEGORIES);
     if (result) {
-        setCategory(result)
+      setCategory(result)
     }
     console.log('categories:', result);
-}
+  }
 
   const fetchAPIUser = async () => {
     const result = await getAPI(API_USER_USERS);
@@ -66,12 +69,26 @@ function App() {
     }
   };
 
-  const onSearch = async (id) => {
-    console.log("nameeeeeeeeeeeeeee ",id);
-   
-    const data = await axios.get(API_PRODUCT_SEARCH, id);
-    setData(data.data);
-    console.log(data);
+  const onSearch = async (name) => {
+    console.log("nameeeeeeeeeeeeeee ", name);
+    console.log(API_PRODUCT_SEARCH + name);
+
+    if (name === '') {
+      setShow(show === 10 ? setShow(1) : show + 1)
+
+    } else {
+      const data = await axios.get(API_PRODUCT_SEARCH + name);
+      setData(data.data);
+      console.log(data);
+    }
+  };
+
+
+  const onSearchCate = async (name) => {
+    console.log("id nay ", name);
+  
+
+    
   };
 
   return (
@@ -88,12 +105,15 @@ function App() {
         pauseOnHover
       />
       <Router>
-        <Header onSearch={onSearch} />
+        <Header onSearchCate={onSearchCate} onSearch={onSearch} />
         <Routes>
           <Route path="/cart" element={<Cart />} />
           <Route path="/" element={<ListProduct data={data} listCategories={category} />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/coupon" element={<Coupon />} />
+          <Route path="/forgot" element={<Forgot />} />
+
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/user" element={<UserScreen />} />
 
@@ -102,6 +122,9 @@ function App() {
           <Route path="/testLogin" element={<LoginNew />} />
 
           <Route path="/detail/:id" element={<DetailProduct />} />
+
+          <Route path="/listCateProduct/:id" element={<ListSearchProductCategory listCategories={category} />} />
+
         </Routes>
         <Footer />
       </Router>

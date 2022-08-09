@@ -28,7 +28,7 @@ function Admin() {
 
 
   const fetchAPI = async () => {
-    const result = await axios.post(API_PRODUCT_LOCAL + '/filter', {});
+    const result = await axios.post(API_PRODUCT_LOCAL + '/list', {});
     // check dữ dữ liệu trước khi lấy
     console.log(result);
     if (result) {
@@ -36,11 +36,31 @@ function Admin() {
     }
   };
 
-  
+
   const onSubmit = async (data) => {
-    if (data.name === '' || data.image === '' || data.descriptions === '' || data.price === '') {
+    if (data.name === '' && data.descriptions === '' && data.image === '' && data.price === '') {
       toast.error("Error required field", { autoClose: 1500 });
-    } else {
+    }
+
+    else if (data.name === '') {
+      toast.error("Name required", { autoClose: 1500 });
+
+    }
+    else if (data.descriptions === '') {
+      toast.error("Descriptions required", { autoClose: 1500 });
+
+    }
+
+    else if (data.image === '') {
+      toast.error("Image required", { autoClose: 1500 });
+
+    }
+
+    else if (data.price === '') {
+      toast.error("Price required", { autoClose: 1500 });
+    }
+
+    else {
       console.log("data onsubmit", data);
       const response = await axios.post(API_PRODUCT_LOCAL, data);
       if (response && response.status === 200) {
@@ -53,13 +73,33 @@ function Admin() {
 
   const onSubmitEdit = async (data) => {
     console.log("id", data.id);
-    const response = await axios.post(API_PRODUCT_LOCAL, data);
-    console.log(data.picture);
-    if (response && response.status === 200) {
-      toast.success("Cập nhập thành công", { autoClose: 1500 });
-      setSelectedPost(undefined);
+
+    if (data.name === '') {
+      toast.error("Name required", { autoClose: 1500 });
+
     }
-    fetchAPI();
+    else if (data.descriptions === '') {
+      toast.error("Descriptions required", { autoClose: 1500 });
+
+    }
+
+    else if (data.image === '') {
+      toast.error("Image required", { autoClose: 1500 });
+
+    }
+
+    else if (data.price === '') {
+      toast.error("Price required", { autoClose: 1500 });
+    }
+    else {
+      const response = await axios.post(API_PRODUCT_LOCAL, data);
+      console.log(data.picture);
+      if (response && response.status === 200) {
+        toast.success("Cập nhập thành công", { autoClose: 1500 });
+        setSelectedPost(undefined);
+      }
+      fetchAPI();
+    }
   };
 
   const onEdit = async (post) => {

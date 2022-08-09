@@ -5,6 +5,8 @@ import "./css/cart.css";
 import { formatMoney } from "./Format";
 import { toast } from "react-toastify";
 import { Link } from 'react-router-dom';
+import { API_COUPON } from "../utils/const";
+import { getAPI } from "../utils/api";
 
 function Cart() {
   // const { picture, price, name, description,id } = props;
@@ -17,10 +19,13 @@ function Cart() {
   const [first, setfirst] = useState([]);
   const [loading, setloading] = useState("");
 
+  const [listCoupon, setListCoupon] = useState([]);
+
   const [temp, setTemp] = useState(1);
   const [value, setValue] = useState();
-
   let sum1 = 0;
+
+
 
   useEffect(() => {
     let TempListCart = localStorage.getItem("Cart");
@@ -28,8 +33,20 @@ function Cart() {
       let ListCart = [];
       ListCart = JSON.parse(TempListCart);
       setfirst(ListCart);
+      fetchAPICoupon();
     }
   }, [loading, temp, sum1]);
+
+
+  const fetchAPICoupon = async () => {
+    const result = await getAPI(API_COUPON);
+    console.log(result);
+    if (result) {
+      setListCoupon(result);
+    }
+  };
+
+  console.log("list coupon ", listCoupon);
 
   const onQuantity = (quantity, id) => {
     for (let i = 0; i < first.length; i++) {
@@ -71,21 +88,48 @@ function Cart() {
     sum1 += Number(item.price) * Number(item.quantity);
   });
 
-  let coupon = ["abc", "bnm", "jkl"];
+  console.log("day ", sum1);
+
+  const [coupon, setCoupon] = useState(sum1);
+
+  let code = ["abc", "bnm", "jkl"];
+
+
+  const [percentShow, setPercentShow] = useState();
+
 
   const onChangeText = (e) => {
     e.preventDefault();
     console.log("value", value);
 
-    coupon.map((item, index) => {
-      console.log(item);
-      if (value == item) {
-        console.log("Bang nhau");
-        sum1 += 50000;
+    listCoupon.map((item, index) => {
+      if (value === item.code) {
+        console.log("Sure");
+        setPercentShow(item.percent)
+        console.log(item.percent);
+        let percent = item.percent;
+      
+
+        let percentDiscount = (Number(100) - Number(percent)) / Number(100);
+        console.log("phan tram giam gia, ", percentDiscount);
+
+        setCoupon(sum1 * percentDiscount)
+        toast('🦄 Success!', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
-  };
 
+  
+
+  };
+  console.log("checkk ", percentShow);
   return (
     <div className="App">
       <section class="section-pagetop bg">
@@ -104,6 +148,7 @@ function Cart() {
                     <tr class="small text-uppercase">
                       <th scope="col">Product</th>
                       <th scope="col">Descriptions</th>
+
                       <th scope="col" width="120">
                         Quantity
                       </th>
@@ -214,13 +259,17 @@ function Cart() {
                   <form>
                     <div class="form-group">
                       <label>Have coupon?</label>
-                      <div class="input-group">
+                      <div style={{ marginBottom: "20px" }} class="input-group">
                         <input
                           type="text"
                           class="form-control"
                           name=""
                           placeholder="Coupon code"
-                          onChange={(e) => setValue(e.target.value)}
+                          onChange={(e) => {
+                            setValue(e.target.value)
+                            setCoupon('')
+                            setPercentShow('')
+                          }}
                         />
                         <span class="input-group-append">
                           <button
@@ -230,7 +279,13 @@ function Cart() {
                             Apply
                           </button>
                         </span>
+
+
+
                       </div>
+                      {percentShow ?
+                        <h3 style={{ marginTop: "10px", color: "#f4ca16", fontStyle: "italic", textDecoration: "line-through" }}>Discount {percentShow}%</h3> : ''
+                      }
                     </div>
                   </form>
                 </div>
@@ -241,8 +296,22 @@ function Cart() {
                     <dt>Total:</dt>
                     <dd class="text-right  h5">
                       <strong> {formatMoney(sum1)}</strong>
+                      {/* { coupon &&
+                        <strong> {formatMoney(coupon)}</strong>
+                      } */}
                     </dd>
                   </dl>
+
+                  {coupon ?
+                    <dl style={{ marginTop: "10px", color: "red", fontStyle: "italic" }} class="dlist-align">
+                      <dt>Promotional price:</dt>
+                      <dd class="text-right  h5">
+                        <strong> {formatMoney(coupon)}</strong>
+                      </dd>
+                    </dl> : ''
+                  }
+
+
                   <hr />
                   <p class="text-center mb-3">
                     <img src="assets/images/misc/payments.png" height="26" />

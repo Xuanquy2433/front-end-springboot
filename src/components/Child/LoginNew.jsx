@@ -32,26 +32,26 @@ function LoginNew() {
       console.log("loi valid");
       toast.error("Username or password error ! ");
     } else {
-      const reponse = await axios.post(API_USER_LOGIN, data);
-      console.log("respon", reponse);
-      if (reponse && reponse.status === 200) {
-        console.log("Login success");
-        // alert("dang nhap thanh cong");
-        toast.success("Login success");
-        localStorage.setItem("token", reponse?.data.token);
-        localStorage.setItem("user", JSON.stringify(reponse.data));
-        // setTimeout(() => window.location.reload(false)
-        //   , 3000)
-        wait();
-
-      }  else if ( reponse &&  reponse.status === 403){
-        toast.error("Username or password incorrect ! ");
-        console.log("dang nhap that bai");
+      try {
+        const reponse = await axios.post(API_USER_LOGIN, data);
+        console.log("respon", reponse);
+        if (reponse && reponse.status === 200) {
+          console.log("Login success");
+          // alert("dang nhap thanh cong");
+          toast.success("Login success");
+          localStorage.setItem("token", reponse?.data.token);
+          localStorage.setItem("user", JSON.stringify(reponse.data));
+          // setTimeout(() => window.location.reload(false)
+          //   , 3000)
+          wait();
+        }
+      } catch (error) {
+        toast.error("Username or password incorrect");
       }
     }
   };
 
-  
+
 
 
 

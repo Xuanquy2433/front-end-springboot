@@ -6,6 +6,7 @@ import Register from "./Register";
 import LoginNew from "./LoginNew";
 import RegisterNew from "./RegisterNew";
 import { toast } from "react-toastify";
+import Forgot from "./Forgot";
 
 function Header({ onSearch }) {
   const [state, setState] = useState("");
@@ -80,7 +81,7 @@ function Header({ onSearch }) {
                       type="text"
                       class="form-control"
                       placeholder="Search"
-                      name="id"
+                      name="name"
                       onChange={(e) => setState(e.target.value)}
                     />
                     <div className="input-group-append">
@@ -130,7 +131,7 @@ function Header({ onSearch }) {
                         </a>{" "}
                         {showName ? <span></span> : <span>| </span>}
 
-                        {showName ? <button className="active"  style={{border: "0px solid",backgroundColor: "white"}} onClick={() => logout()} >Logout</button> : <span></span>}
+                        {showName ? <button className="active" style={{ border: "0px solid", backgroundColor: "white" }} onClick={() => logout()} >Logout</button> : <span></span>}
 
                         <a
                           className="trigger-btnn"
@@ -225,18 +226,26 @@ function Header({ onSearch }) {
                       Home interior
                     </a>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="#">
-                      Category 1
+                    <a className="dropdown-item"
+                    >Help
                     </a>
+
                     <a className="dropdown-item" href="#">
-                      Category 2
+                    About
                     </a>
-                    <a className="dropdown-item" href="#">
-                      Category 3
+                    <a className="dropdown-item" data-toggle="modal"
+                      href="#myModalForgot">
+                      Forgot password
                     </a>
                   </div>
                 </li>
               </ul>
+
+
+              <div id="myModalForgot" className="modal fade">
+                <Forgot />
+              </div>
+
             </div>
           </div>
         </nav>

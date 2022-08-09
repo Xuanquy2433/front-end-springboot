@@ -35,13 +35,31 @@ function ListUser({ data }) {
   const onSubmit = async (user) => {
     console.log(user);
 
-    if (user.username === '' || user.password === '' || user.email === '' || user.name === '') {
+    if (user.username === '' && user.password === '' && user.email === '' && user.name === '') {
       toast.error("Error required field", { autoClose: 1500 });
-    } else {
-      const response = await axios.post(API_USER_ADMIN, user);
-      if (response && response.status === 200) {
-        toast.success("Thêm thành công", { autoClose: 1500 });
-        fetchAPI();
+    }
+    else if (user.username === '') {
+      toast.error("Username required field", { autoClose: 1500 });
+    }
+    else if (user.password === '') {
+      toast.error("Password required field", { autoClose: 1500 });
+    }
+    else if (user.email === '') {
+      toast.error("Email required field", { autoClose: 1500 });
+    }
+    else if (user.name === '') {
+      toast.error("Name required field", { autoClose: 1500 });
+    }
+    else {
+      try {
+        const response = await axios.post(API_USER_ADMIN, user);
+        if (response && response.status === 200) {
+          toast.success("Thêm thành công", { autoClose: 1500 });
+          fetchAPI();
+        }
+      } catch (error) {
+        toast.error("Email already exists");
+
       }
       fetchAPI();
     }
@@ -49,11 +67,14 @@ function ListUser({ data }) {
 
   const onSubmitEdit = async (user) => {
     console.log("id", user);
-    const response = await postAPI(API_USER_ADMIN, user);
-
-    if (response && response.status === 200) {
-      toast.success("Cập nhập thành công", { autoClose: 1500 });
-      setSelectedPost(undefined);
+    try {
+      const response = await postAPI(API_USER_ADMIN, user);
+      if (response && response.status === 200) {
+        toast.success("Cập nhập thành công", { autoClose: 1500 });
+        setSelectedPost(undefined);
+      }
+    } catch (error) {
+      toast.error("Email already exists");
     }
     fetchAPI();
   };

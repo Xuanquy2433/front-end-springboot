@@ -1,20 +1,34 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { API_PRODUCT_SEARCH_CATE } from "../utils/const";
 import Product from "./Product";
 import Sliderr from "./Sliderr";
 
 
-function ListProduct({ data, listCategories, onSearchCate }) {
-  console.log("listproduct,", data);
+function ListSearchProductCategory({ listCategories }) {
+  const [data, setData] = useState([]);
 
-  const [state, setState] = useState("");
+  useEffect(() => {
+    console.log("UseEffect");
+    fetchAPI();
 
-  const onClickButton = (event) => {
-    console.log("id ", event);
-    // setState(event)
-    // onSearchCate(state);
 
+  }, [data]);
+
+  const { id } = useParams();
+
+  const fetchAPI = async () => {
+    console.log("param id ", id);
+    const result = await axios.get(API_PRODUCT_SEARCH_CATE + id);
+    //kiem tra du lieu truoc khi lay
+    if (result) {
+      setData(result.data);
+      console.log(result);
+    }
   };
+
 
   return (
     <React.Fragment>
@@ -31,7 +45,7 @@ function ListProduct({ data, listCategories, onSearchCate }) {
                   {listCategories &&
                     listCategories.map((item, index) => (
                       <li key={index}>
-                        <Link style={{ cursor: "pointer" }} to={`/listCateProduct/${item.id}`} onClick={() => onClickButton(item.id)}  > {item.name} </Link>
+                        <Link style={{ cursor: "pointer" }} to={`/listCateProduct/${item.id}`}   > {item.name} </Link>
                       </li>
                     ))
                   }
@@ -70,20 +84,25 @@ function ListProduct({ data, listCategories, onSearchCate }) {
       <section className="section-name padding-y-sm">
         <div className="container">
           <header className="section-heading">
-            <a href="#" className="btn btn-outline-primary float-right">
-              See all
-            </a>
-            <h3 className="section-title">Popular products</h3>
+
+            {
+              data.length !== 0 ? <a href="#" className="btn btn-outline-primary float-right">
+                See all
+              </a> : ''
+            }
+            {
+              data.length !== 0 ? <h3 className="section-title">Popular products</h3> : ''
+            }
           </header>
           <div className="row">
-            {
+            {data.length !== 0 ?
               data.map((item, index) => {
                 return (
                   <div key={index} className="col-md-3 ani">
                     <Product {...item} />
                   </div>
                 );
-              })}
+              }) : <h3 style={{ width: "60%", margin: "auto", clear: "both", marginTop: "10px",color: "grey" }}>Chưa có loại sản phẩm này</h3>}
           </div>
         </div>
       </section>
@@ -109,4 +128,4 @@ function ListProduct({ data, listCategories, onSearchCate }) {
   );
 }
 
-export default ListProduct;
+export default ListSearchProductCategory;

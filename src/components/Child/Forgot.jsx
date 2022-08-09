@@ -8,7 +8,7 @@ import axios from "axios";
 import { API_USER_FORGOT, API_USER_REGISTER } from "../utils/const";
 import { toast } from "react-toastify";
 
-function RegisterNew() {
+function Forgot() {
 
   const [data, setData] = useState({
     username: "",
@@ -26,58 +26,30 @@ function RegisterNew() {
     window.location.reload(false)
   }
 
-  const onRegister = async (e) => {
-
-    if (data.username === '' && data.password === '' && data.name === '' && data.email === '') {
-      console.log("loi valid");
-      toast.error(" Error fields! ");
-    } 
-    else if(data.username === ''){
-      toast.error("Username required field! ");
-
-    }
-    else if(data.password === ''){
-      toast.error("Password required field! ");
-
-    }
-    else if(data.name === ''){
-      toast.error("Name required field! ");
-
-    }
-    else if(data.email === ''){
-      toast.error("Email required field! ");
-
-    }
-    else if (data.password.length < 3) {
-      toast.error(" Password must be from 3> 15 characters, A-Z 0-9");
-    }
-
-    else {
-      try {
-        const reponse = await axios.post(API_USER_REGISTER, data);
-        if (reponse && reponse.status == 200) {
-          console.log("Register sucsess");
-          toast.success("Sign up success");
-          wait();
-        }
-      } catch (error) {
-        toast.error("Email already exists");
-      }
-    }
-  };
 
   const onForgot = async (e) => {
     console.log("forgot", data);
-    if (data.username === '' || data.email === '') {
+    if (data.username === '' && data.email === '') {
       console.log("loi valid");
       toast.error(" Error fields! ");
-    } else {
+    }
+    else if (data.username === '') {
+      toast.error(" Username required fields! ");
 
-      const reponse = await axios.post(API_USER_FORGOT, data);
-      if (reponse && reponse.status == 200) {
-        console.log(" sucsess");
-        toast.success(" success");
-        wait();
+    } else if (data.email === '') {
+      toast.error(" Email required fields! ");
+
+    }
+    else {
+      try {
+        const reponse = await axios.post(API_USER_FORGOT, data);
+        if (reponse && reponse.status == 200) {
+          console.log(" sucsess");
+          toast.success(" success");
+          wait();
+        }
+      } catch (error) {
+        toast.error("Username or email does not exist ! ");
       }
     }
   };
@@ -92,25 +64,25 @@ function RegisterNew() {
   return (
     <div class="modal-dialog modal-login" >
       <div class="modal-content2" >
-        <MainContainer >
+        <MainContainer  >
           <WelcomeText style={{ marginBottom: "50px" }}>Welcome</WelcomeText>
-          <InputContainer style={{ marginTop: "20px" }}>
-            <Input type="text" placeholder="Name"
+          <InputContainer >
+            {/* <Input type="text" placeholder="Name"
               required="required"
-              onChange={(e) => setData({ ...data, name: e.target.value })} />
+              onChange={(e) => setData({ ...data, name: e.target.value })} /> */}
             <Input type="text" placeholder="Email"
               required="required"
               onChange={(e) => setData({ ...data, email: e.target.value })} />
             <Input type="text" placeholder="UserName"
               required="required"
               onChange={(e) => setData({ ...data, username: e.target.value })} />
-            <Input type="password" placeholder="Password"
+            {/* <Input type="password" placeholder="Password"
               required="required"
-              onChange={(e) => setData({ ...data, password: e.target.value })} />
+              onChange={(e) => setData({ ...data, password: e.target.value })} /> */}
           </InputContainer>
           <ButtonContainer style={{ marginTop: "75px" }} >
-            <Button content="Sign Up" onClick={(e) => {
-              onRegister(e);
+            <Button content="Submit" onClick={(e) => {
+              onForgot(e);
             }} />
           </ButtonContainer>
           <LoginWith>OR LOGIN WITH</LoginWith>
@@ -126,9 +98,9 @@ function RegisterNew() {
               <FaTwitter />
             </Icon>
           </IconsContainer>
-          <ForgotPassword style={{ marginTop: "0px" }} onClick={(e) => {
-            onForgot(e);
-          }} >Forgot Password ?</ForgotPassword>
+          {/* <ForgotPassword style={{ marginTop: "0px" }} onClick={(e) => {
+              onForgot(e);
+            }} >Forgot Password ?</ForgotPassword> */}
         </MainContainer>
       </div>
     </div>
@@ -181,7 +153,7 @@ const MainContainer = styled.div`
     }
     @media only screen and (min-width: 1280px) {
       width: 30vw;
-      height: 90vh;
+      height: 80vh;
     }
   `;
 
@@ -233,4 +205,4 @@ const ForgotPassword = styled.h4`
     cursor: pointer;
   `;
 
-export default RegisterNew;
+export default Forgot;

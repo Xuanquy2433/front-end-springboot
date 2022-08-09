@@ -42,7 +42,7 @@ function PopupCreate({ item, onSubmit, listBrand }) {
     console.log("valueeeeeeeeeeeeeeeeee", value);
   }
 
-  if(data.categoryId === ''){
+  if (data.categoryId === '') {
     console.log("Null id ");
     setData({ ...data, categoryId: 9 })
   }
@@ -70,8 +70,9 @@ function PopupCreate({ item, onSubmit, listBrand }) {
             </button>
           </div>
           <div class="modal-body">
-            <Form>
-              <Form.Group widths="equal">
+          {/* enctype="multipart/form-data" */}
+            <Form >
+              <Form.Group enctype="multipart/form-data" widths="equal">
                 <Form.Field
                   id="form-input-control-first-name"
                   control={Input}
@@ -91,6 +92,8 @@ function PopupCreate({ item, onSubmit, listBrand }) {
                   defaultValue={""}
                   onChange={onChangeText}
                 />
+                {/* <input type="file" name="image"   onChange={onChangeText} class="form-control" /> */}
+
               </Form.Group>
               <Form.Field
                 id="form-input-control-last-name"
