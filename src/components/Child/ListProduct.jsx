@@ -4,7 +4,7 @@ import Product from "./Product";
 import Sliderr from "./Sliderr";
 
 
-function ListProduct({ data, listCategories, onSearchCate }) {
+function ListProduct({ data, listCategories, onSearchCate, showText, showName }) {
   console.log("listproduct,", data);
 
   const [state, setState] = useState("");
@@ -74,8 +74,13 @@ function ListProduct({ data, listCategories, onSearchCate }) {
               See all
             </a>
             <h3 className="section-title">Popular products</h3>
+
+
           </header>
+
+          {showText ? <h3 style={{textAlign: 'left',marginTop: '50px',fontStyle: 'italic', fontSize: '17px',color: 'grey'}} >  {data.length}  result for  "{showName}" </h3> : ''}
           <div className="row">
+
             {
               data.map((item, index) => {
                 return (

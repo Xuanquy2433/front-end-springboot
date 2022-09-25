@@ -29,7 +29,6 @@ function CategoryScreen() {
     }
 
     const onSubmit = async (data) => {
-
         if (data.name === '') {
             toast.error("Name required field", { autoClose: 1500 });
         } else {

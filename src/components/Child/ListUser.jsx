@@ -44,6 +44,9 @@ function ListUser({ data }) {
     else if (user.password === '') {
       toast.error("Password required field", { autoClose: 1500 });
     }
+    else if (user.password.length < 3) {
+      toast.error("Password required > 3", { autoClose: 1500 });
+    }
     else if (user.email === '') {
       toast.error("Email required field", { autoClose: 1500 });
     }

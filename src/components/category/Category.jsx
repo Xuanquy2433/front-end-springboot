@@ -1,6 +1,7 @@
 import React from 'react';
 
 
+
 function Category(props) {
     const { id, name, onEdit, onRemove, post } = props
 

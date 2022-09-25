@@ -36,10 +36,16 @@ function App() {
   const [isFetchData, setIsFetchData] = useState(false);
   const [show, setShow] = useState(0);
 
+
+  const [showText, setShowText] = useState(false);
+  const [showName, setShowName] = useState('');
+
   useEffect(() => {
     console.log("UseEffect");
     fetchAPI();
     fetchAPIUser();
+    setShowText(false)
+    setShowName('')
     list();
   }, [isFetchData, show]);
 
@@ -79,6 +85,8 @@ function App() {
     } else {
       const data = await axios.get(API_PRODUCT_SEARCH + name);
       setData(data.data);
+      setShowText(true)
+      setShowName(name)
       console.log(data);
     }
   };
@@ -86,9 +94,8 @@ function App() {
 
   const onSearchCate = async (name) => {
     console.log("id nay ", name);
-  
 
-    
+
   };
 
   return (
@@ -108,7 +115,7 @@ function App() {
         <Header onSearchCate={onSearchCate} onSearch={onSearch} />
         <Routes>
           <Route path="/cart" element={<Cart />} />
-          <Route path="/" element={<ListProduct data={data} listCategories={category} />} />
+          <Route path="/" element={<ListProduct data={data} showText={showText} showName={showName} listCategories={category} />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/coupon" element={<Coupon />} />
